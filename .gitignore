@@ -1,0 +1,13 @@
+referensi-desain
+web
+webf
+api/.env
+api/vendor
+webui/.env
+webui/node_modules
+webui/.nuxt
+nul
+nuxt_frontend_setup.md
+webui/.gitignore
+api/.gitignore
+api/.gitattributes
