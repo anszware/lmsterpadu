@@ -15,15 +15,28 @@ use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(\Illuminate\Http\Request $request): JsonResponse
     {
-        $users = User::with(['role', 'person', 'sekolah', 'guru', 'sisw'])->paginate(15);
+        $search = $request->query('search');
+
+        $users = User::with(['role', 'person', 'sekolah', 'siswa', 'guru', 'pic'])
+            ->when($search, function ($query) use ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('username', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%")
+                        ->orWhereHas('person', function ($qp) use ($search) {
+                            $qp->where('full_name', 'like', "%{$search}%");
+                        });
+                });
+            })
+            ->paginate(15);
+
         return UserResource::collection($users)->response();
     }
 
     public function show(User $user): JsonResponse
     {
-        $user->load(['role', 'person', 'sekolah', 'guru', 'sisw']);
+        $user->load(['role', 'person', 'sekolah']);
         return (new UserResource($user))->response();
     }
 
@@ -38,9 +51,19 @@ class UserController extends Controller
             ]);
 
             $personData = $request->only([
-                'nik', 'full_name', 'gender', 'tempat_lahir', 'tanggal_lahir',
-                'alamat', 'provinsi_id', 'kota_id', 'kecamatan_id', 'kelurahan_id',
-                'rt', 'rw', 'no_hp'
+                'nik',
+                'full_name',
+                'gender',
+                'tempat_lahir',
+                'tanggal_lahir',
+                'alamat',
+                'provinsi_id',
+                'kota_id',
+                'kecamatan_id',
+                'kelurahan_id',
+                'rt',
+                'rw',
+                'no_hp'
             ]);
 
             if ($request->hasFile('foto')) {
@@ -70,9 +93,19 @@ class UserController extends Controller
             $user->update($userData);
 
             $personData = $request->only([
-                'nik', 'full_name', 'gender', 'tempat_lahir', 'tanggal_lahir',
-                'alamat', 'provinsi_id', 'kota_id', 'kecamatan_id', 'kelurahan_id',
-                'rt', 'rw', 'no_hp'
+                'nik',
+                'full_name',
+                'gender',
+                'tempat_lahir',
+                'tanggal_lahir',
+                'alamat',
+                'provinsi_id',
+                'kota_id',
+                'kecamatan_id',
+                'kelurahan_id',
+                'rt',
+                'rw',
+                'no_hp'
             ]);
 
             if ($request->hasFile('foto')) {
@@ -84,7 +117,7 @@ class UserController extends Controller
 
             $user->person()->updateOrCreate(['user_id' => $user->id], $personData);
 
-            $user->load(['role', 'person', 'sekolah', 'guru', 'sisw']);
+            $user->load(['role', 'person']);
             return (new UserResource($user))->response();
         });
     }

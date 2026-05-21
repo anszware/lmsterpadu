@@ -48,6 +48,13 @@ const menuGroups = [
         ]
     },
     {
+        title: 'Master Data',
+        items: [
+            { name: 'Jurusan', icon: 'ph:graduation-cap-duotone', to: '/admin/jurusan' },
+            { name: 'Sekolah', icon: 'ph:school-duotone', to: '/admin/sekolah' }
+        ]
+    },
+    {
         title: 'Pages',
         items: [
             // { name: 'Pages', icon: 'ph:file-duotone', to: '/admin/pages', badge: 'New' },

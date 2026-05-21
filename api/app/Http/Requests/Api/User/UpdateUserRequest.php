@@ -6,6 +6,8 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
+use Illuminate\Validation\Rule;
+
 class UpdateUserRequest extends FormRequest
 {
     public function authorize(): bool
@@ -15,16 +17,20 @@ class UpdateUserRequest extends FormRequest
 
     public function rules(): array
     {
-        $userId = $this->route('user');
-        $user = \App\Models\User::find($userId);
-        $personId = $user ? $user->person?->id : null;
+        $user = $this->route('user');
+        
+        // Jika route model binding memberikan instance User
+        $userId = $user instanceof \App\Models\User ? $user->id : $user;
+        $userModel = $user instanceof \App\Models\User ? $user : \App\Models\User::find($userId);
+        
+        $personId = $userModel ? $userModel->person?->id : null;
 
         return [
-            'username' => ['nullable', 'string', 'max:255', 'unique:users,username,' . $userId],
-            'email'    => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $userId],
+            'username' => ['nullable', 'string', 'max:255', Rule::unique('users', 'username')->ignore($userId)],
+            'email'    => ['required', 'string', 'email', 'max:255', Rule::unique('users', 'email')->ignore($userId)],
             'password' => ['nullable', 'string', 'min:8'],
             'role_id'  => ['required', 'integer', 'exists:role,id'],
-            'nik'           => ['required', 'string', 'digits:16', 'unique:people,nik,' . $personId],
+            'nik'           => ['required', 'string', 'digits:16', Rule::unique('people', 'nik')->ignore($personId)],
             'full_name'     => ['required', 'string', 'max:255'],
             'gender'        => ['required', 'in:L,P'],
             'tempat_lahir'  => ['required', 'string', 'max:255'],

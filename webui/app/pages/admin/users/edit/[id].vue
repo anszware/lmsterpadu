@@ -268,10 +268,15 @@ onMounted(async () => {
       previewUrl.value = user.person.foto
     }
 
-    // Load cascaded data
-    if (form.provinsi_id) kotas.value = await fetchKota(form.provinsi_id)
-    if (form.kota_id) kecamatans.value = await fetchKecamatan(form.kota_id)
-    if (form.kecamatan_id) kelurahans.value = await fetchKelurahan(form.kecamatan_id)
+    // Load cascaded data in parallel for speed
+    const wilayahPromises = []
+    if (form.provinsi_id) wilayahPromises.push(fetchKota(form.provinsi_id).then(res => kotas.value = res))
+    if (form.kota_id) wilayahPromises.push(fetchKecamatan(form.kota_id).then(res => kecamatans.value = res))
+    if (form.kecamatan_id) wilayahPromises.push(fetchKelurahan(form.kecamatan_id).then(res => kelurahans.value = res))
+    
+    if (wilayahPromises.length > 0) {
+      await Promise.all(wilayahPromises)
+    }
 
   } catch (error) {
     console.error('Failed to load user data:', error)
@@ -329,11 +334,13 @@ const submitForm = async () => {
       }
     }
 
+    const token = useCookie('access_token')
     await fetchapi(`/admin/user/${userId}`, {
       method: 'POST', // Use POST with _method=PUT for FormData support
       body: formData,
       headers: {
-        'Accept': 'application/json'
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token.value}`
       }
     })
 

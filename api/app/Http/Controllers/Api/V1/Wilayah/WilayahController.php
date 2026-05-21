@@ -24,15 +24,22 @@ class WilayahController extends Controller
      */
     public function provinsi(Request $request): JsonResponse
     {
-        $query = Provinsi::query()->orderBy('nama_provinsi');
+        $search = $request->query('search');
+        $isAll = $request->boolean('all');
+        
+        $cacheKey = 'wilayah_provinsi_' . ($search ?: 'all') . '_' . ($isAll ? 'full' : 'page_' . $request->integer('per_page', 34));
 
-        if ($request->filled('search')) {
-            $query->where('nama_provinsi', 'like', '%' . $request->search . '%');
-        }
+        $provinsi = \Illuminate\Support\Facades\Cache::remember($cacheKey, now()->addDay(), function () use ($request, $search, $isAll) {
+            $query = Provinsi::query()->orderBy('nama_provinsi');
 
-        $provinsi = $request->boolean('all')
-            ? $query->get()
-            : $query->paginate($request->integer('per_page', 34));
+            if ($search) {
+                $query->where('nama_provinsi', 'like', '%' . $search . '%');
+            }
+
+            return $isAll
+                ? $query->get()
+                : $query->paginate($request->integer('per_page', 34));
+        });
 
         return ProvinsiResource::collection($provinsi)->response();
     }
@@ -59,16 +66,24 @@ class WilayahController extends Controller
             'search'      => ['nullable', 'string', 'max:100'],
         ]);
 
-        $query = Kota::where('provinsi_id', $request->provinsi_id)
-                     ->orderBy('nama_kota');
+        $provinsiId = $request->provinsi_id;
+        $search = $request->search;
+        $isAll = $request->boolean('all');
 
-        if ($request->filled('search')) {
-            $query->where('nama_kota', 'like', '%' . $request->search . '%');
-        }
+        $cacheKey = "wilayah_kota_{$provinsiId}_" . ($search ?: 'all') . "_" . ($isAll ? 'full' : 'page');
 
-        $kota = $request->boolean('all')
-            ? $query->get()
-            : $query->paginate($request->integer('per_page', 20));
+        $kota = \Illuminate\Support\Facades\Cache::remember($cacheKey, now()->addDay(), function () use ($request, $provinsiId, $search, $isAll) {
+            $query = Kota::where('provinsi_id', $provinsiId)
+                         ->orderBy('nama_kota');
+
+            if ($search) {
+                $query->where('nama_kota', 'like', '%' . $search . '%');
+            }
+
+            return $isAll
+                ? $query->get()
+                : $query->paginate($request->integer('per_page', 20));
+        });
 
         return KotaResource::collection($kota)->response();
     }
@@ -96,16 +111,24 @@ class WilayahController extends Controller
             'search'  => ['nullable', 'string', 'max:100'],
         ]);
 
-        $query = Kecamatan::where('kota_id', $request->kota_id)
-                          ->orderBy('nama_kecamatan');
+        $kotaId = $request->kota_id;
+        $search = $request->search;
+        $isAll = $request->boolean('all');
 
-        if ($request->filled('search')) {
-            $query->where('nama_kecamatan', 'like', '%' . $request->search . '%');
-        }
+        $cacheKey = "wilayah_kecamatan_{$kotaId}_" . ($search ?: 'all') . "_" . ($isAll ? 'full' : 'page');
 
-        $kecamatan = $request->boolean('all')
-            ? $query->get()
-            : $query->paginate($request->integer('per_page', 20));
+        $kecamatan = \Illuminate\Support\Facades\Cache::remember($cacheKey, now()->addDay(), function () use ($request, $kotaId, $search, $isAll) {
+            $query = Kecamatan::where('kota_id', $kotaId)
+                              ->orderBy('nama_kecamatan');
+
+            if ($search) {
+                $query->where('nama_kecamatan', 'like', '%' . $search . '%');
+            }
+
+            return $isAll
+                ? $query->get()
+                : $query->paginate($request->integer('per_page', 20));
+        });
 
         return KecamatanResource::collection($kecamatan)->response();
     }
@@ -134,20 +157,29 @@ class WilayahController extends Controller
             'tipe'         => ['nullable', 'in:Kelurahan,Desa'],
         ]);
 
-        $query = Kelurahan::where('kecamatan_id', $request->kecamatan_id)
-                          ->orderBy('nama_kelurahan');
+        $kecamatanId = $request->kecamatan_id;
+        $search = $request->search;
+        $tipe = $request->tipe;
+        $isAll = $request->boolean('all');
 
-        if ($request->filled('search')) {
-            $query->where('nama_kelurahan', 'like', '%' . $request->search . '%');
-        }
+        $cacheKey = "wilayah_kelurahan_{$kecamatanId}_" . ($search ?: 'all') . "_{$tipe}_" . ($isAll ? 'full' : 'page');
 
-        if ($request->filled('tipe')) {
-            $query->where('tipe_kelurahan', $request->tipe);
-        }
+        $kelurahan = \Illuminate\Support\Facades\Cache::remember($cacheKey, now()->addDay(), function () use ($request, $kecamatanId, $search, $tipe, $isAll) {
+            $query = Kelurahan::where('kecamatan_id', $kecamatanId)
+                              ->orderBy('nama_kelurahan');
 
-        $kelurahan = $request->boolean('all')
-            ? $query->get()
-            : $query->paginate($request->integer('per_page', 20));
+            if ($search) {
+                $query->where('nama_kelurahan', 'like', '%' . $search . '%');
+            }
+
+            if ($tipe) {
+                $query->where('tipe_kelurahan', $tipe);
+            }
+
+            return $isAll
+                ? $query->get()
+                : $query->paginate($request->integer('per_page', 20));
+        });
 
         return KelurahanResource::collection($kelurahan)->response();
     }

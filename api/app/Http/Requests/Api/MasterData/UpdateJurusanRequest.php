@@ -6,6 +6,8 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
+use Illuminate\Validation\Rule;
+
 class UpdateJurusanRequest extends FormRequest
 {
     public function authorize(): bool
@@ -15,11 +17,12 @@ class UpdateJurusanRequest extends FormRequest
 
     public function rules(): array
     {
-        $jurusanId = $this->route('jurusan');
+        $jurusan = $this->route('jurusan');
+        $jurusanId = $jurusan instanceof \App\Models\Jurusan ? $jurusan->id : $jurusan;
 
         return [
             'nama_jurusan' => ['required', 'string', 'max:255'],
-            'kode_jurusan' => ['required', 'string', 'max:20', 'unique:jurusan,kode_jurusan,' . $jurusanId],
+            'kode_jurusan' => ['required', 'string', 'max:20', Rule::unique('jurusan', 'kode_jurusan')->ignore($jurusanId)],
             'deskripsi'    => ['nullable', 'string', 'max:500'],
         ];
     }

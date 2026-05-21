@@ -19,7 +19,19 @@ export const useWilayah = () => {
     }
 
     const fetchProvinsi = async (search = '') => {
-        return await fetchWilayah('/wilayah/provinsi', { search })
+        // Caching provinsi karena jarang berubah
+        if (!search && typeof window !== 'undefined') {
+            const cached = localStorage.getItem('list_provinsi')
+            if (cached) return JSON.parse(cached)
+        }
+
+        const data = await fetchWilayah('/wilayah/provinsi', { search })
+        
+        if (!search && data.length > 0 && typeof window !== 'undefined') {
+            localStorage.setItem('list_provinsi', JSON.stringify(data))
+        }
+        
+        return data
     }
 
     const fetchKota = async (provinsiId, search = '') => {

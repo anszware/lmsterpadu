@@ -50,8 +50,8 @@ class UserResource extends JsonResource
             'guru' => $this->whenLoaded('guru', function () {
                 return $this->guru ? ['id' => $this->guru->id] : null;
             }),
-            'siswa' => $this->whenLoaded('sisw', function () {
-                return $this->sisw ? ['id' => $this->sisw->id] : null;
+            'siswa' => $this->whenLoaded('siswa', function () {
+                return $this->siswa ? ['id' => $this->siswa->id] : null;
             }),
             'created_at' => $this->created_at?->toDateTimeString(),
             'updated_at' => $this->updated_at?->toDateTimeString(),

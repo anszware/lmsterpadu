@@ -28,10 +28,10 @@ Route::middleware('auth:sanctum')->group(function () {
     // Contoh Route Khusus Admin
     Route::middleware('role:admin')->prefix('admin')->group(function () {
         Route::apiResource('user', UserController::class);
-        Route::get('users', [UserController::class, 'index']);
         Route::apiResource('user/pic', PicController::class);
         Route::apiResource('user/guru', GuruController::class);
         Route::apiResource('jurusan', JurusanController::class);
+        Route::apiResource('sekolah', SekolahController::class);
         Route::apiResource('siswa', SiswaController::class);
         Route::post('siswa/import', [SiswaController::class, 'importCsv']);
         Route::get('/dashboard', [DashboardController::class, 'index']);

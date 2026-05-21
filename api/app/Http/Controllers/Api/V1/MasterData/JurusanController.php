@@ -11,9 +11,15 @@ use Illuminate\Http\JsonResponse;
 
 class JurusanController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(\Illuminate\Http\Request $request): JsonResponse
     {
-        $jurusan = Jurusan::paginate(15);
+        $search = $request->query('search');
+        
+        $jurusan = Jurusan::when($search, function ($query) use ($search) {
+            $query->where('nama_jurusan', 'like', "%{$search}%")
+                  ->orWhere('kode_jurusan', 'like', "%{$search}%");
+        })->paginate(15);
+        
         return JurusanResource::collection($jurusan)->response();
     }
 
