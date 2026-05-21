@@ -108,9 +108,9 @@
                                     <div class="flex flex-col gap-2">
                                         <label class="text-xs font-bold text-slate-500 uppercase">NIK / ID
                                             Number</label>
-                                        <input type="text" :value="user.person?.nik"
-                                            class="form-input-custom bg-slate-100 dark:bg-slate-800/50 cursor-not-allowed"
-                                            readonly />
+                                        <input type="text" v-model="form.nik" :disabled="!isEditing"
+                                            class="form-input-custom"
+                                            :class="{ 'bg-slate-100 dark:bg-slate-800/50 cursor-not-allowed': !isEditing }" />
                                     </div>
 
                                     <!-- View Mode Fields -->
@@ -271,7 +271,8 @@ definePageMeta({
     allowedRoles: ['admin']
 })
 
-const { get, put } = useApi()
+const { get, put, post } = useApi()
+const { showAlert } = useAlert()
 const activeTab = ref('profile')
 
 // Menggunakan useAsyncData untuk kontrol lebih detail
@@ -288,7 +289,7 @@ const { data: user, pending, error } = await useAsyncData(
         }
     }
 )
-console.log('Data User:', user.value) // Debugging data user
+// console.log('Data User:', user.value) // Debugging data user
 const tempat_tanggal_lahir = computed(() => {
     if (user.value && user.value.person) {
         const tempat = user.value.person.tempat_lahir || 'Unknown'
@@ -322,6 +323,7 @@ const kelurahans = ref([])
 
 const form = reactive({
     full_name: '',
+    nik: '',
     tempat_lahir: '',
     tanggal_lahir: '',
     gender: '',
@@ -352,6 +354,7 @@ const initForm = () => {
     if (user.value && user.value.person) {
         const p = user.value.person
         form.full_name = p.full_name || ''
+        form.nik = p.nik || ''
         form.tempat_lahir = p.tempat_lahir || ''
         form.tanggal_lahir = p.tanggal_lahir || ''
         form.gender = p.gender || 'L'
@@ -390,20 +393,22 @@ const toggleEdit = async () => {
 const updateProfile = async () => {
     updating.value = true
     try {
-        await put(`/admin/user/${user.value.id}`, {
-            // User fields
-            full_name: form.full_name,
-            // Person fields (backend should handle mapping)
+        await post('/profile', {
             ...form
         })
 
         // Refresh data
         await refreshNuxtData('profile-me')
         isEditing.value = false
-        alert('Profil berhasil diperbarui!')
+        showAlert({
+            title: 'Berhasil!',
+            text: 'Profil berhasil diperbarui!',
+            icon: 'success',
+            timer: 1500
+        })
     } catch (e) {
         console.error('Failed to update profile', e)
-        alert(e.data?.message || 'Terjadi kesalahan saat memperbarui profil.')
+        showAlert(e.data?.message || 'Terjadi kesalahan saat memperbarui profil.', 'error')
     } finally {
         updating.value = false
     }

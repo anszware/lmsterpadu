@@ -24,6 +24,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/me', [AuthController::class, 'me']);
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/profile', [\App\Http\Controllers\Api\V1\PersonController::class, 'updateProfile']);
+    Route::get('/people', [\App\Http\Controllers\Api\V1\PersonController::class, 'index']);
 
     // Contoh Route Khusus Admin
     Route::middleware('role:admin')->prefix('admin')->group(function () {

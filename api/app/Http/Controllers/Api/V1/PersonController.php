@@ -3,65 +3,87 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use App\Models\Person;
+use App\Models\User;
+use App\Http\Resources\User\UserResource;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Validator;
 
 class PersonController extends Controller
 {
+    /**
+     * Update or Create person profile for the authenticated user.
+     */
+    public function updateProfile(Request $request): JsonResponse
+    {
+        $user = $request->user();
+        $personId = $user->person?->id;
+
+        $validator = Validator::make($request->all(), [
+            'full_name'     => ['required', 'string', 'max:255'],
+            'nik'           => ['required', 'string', 'digits:16', Rule::unique('people', 'nik')->ignore($personId)],
+            'gender'        => ['required', 'in:L,P'],
+            'tempat_lahir'  => ['required', 'string', 'max:255'],
+            'tanggal_lahir' => ['required', 'date'],
+            'alamat'        => ['required', 'string'],
+            'provinsi_id'   => ['required', 'exists:provinsis,id'],
+            'kota_id'       => ['required', 'exists:kotas,id'],
+            'kecamatan_id'  => ['required', 'exists:kecamatans,id'],
+            'kelurahan_id'  => ['required', 'exists:kelurahans,id'],
+            'rt'            => ['required', 'string', 'max:10'],
+            'rw'            => ['required', 'string', 'max:10'],
+            'no_hp'         => ['required', 'string', 'max:20'],
+            'foto'          => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Data tidak valid.',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        return DB::transaction(function () use ($request, $user) {
+            $personData = $request->only([
+                'nik',
+                'full_name',
+                'gender',
+                'tempat_lahir',
+                'tanggal_lahir',
+                'alamat',
+                'provinsi_id',
+                'kota_id',
+                'kecamatan_id',
+                'kelurahan_id',
+                'rt',
+                'rw',
+                'no_hp'
+            ]);
+
+            if ($request->hasFile('foto')) {
+                if ($user->person && $user->person->foto) {
+                    Storage::disk('public')->delete($user->person->foto);
+                }
+                $personData['foto'] = $request->file('foto')->store('photos', 'public');
+            }
+
+            // Update or Create logic
+            $user->person()->updateOrCreate(
+                ['user_id' => $user->id],
+                $personData
+            );
+
+            $user->load(['role', 'person', 'sekolah']);
+            return (new UserResource($user))->response();
+        });
+    }
+
     public function index()
     {
-
-        $people = Person::all();
-
+        $people = \App\Models\Person::all();
         return response()->json($people);
-    }
-    public function store(Request $request, $id)
-    {
-        $request->validate([
-            'nik' => 'required|unique:people,nik|numeric|digits:16',
-            'full_name' => 'required|string|max:255',
-            'gender' => 'required|in:L,P',
-            'tempat_lahir' => 'required|string|max:255',
-            'tanggal_lahir' => 'required|date',
-            'alamat' => 'required|string|max:255',
-            'provinsi_id' => 'required|exists:provinsis,id',
-            'kota_id' => 'required|exists:kotas,id',
-            'kecamatan_id' => 'required|exists:kecamatans,id',
-            'kelurahan_id' => 'required|exists:kelurahans,id',
-            'rt' => 'required|string|max:3',
-            'rw' => 'required|string|max:3',
-            'no_hp' => 'required|string|max:16',
-            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
-
-        $person = Person::create([
-            'nik' => $request->nik,
-            'full_name' => $request->full_name,
-            'gender' => $request->gender,
-            'tempat_lahir' => $request->tempat_lahir,
-            'tanggal_lahir' => $request->tanggal_lahir,
-            'alamat' => $request->alamat,
-            'provinsi_id' => $request->provinsi_id,
-            'kota_id' => $request->kota_id,
-            'kecamatan_id' => $request->kecamatan_id,
-            'kelurahan_id' => $request->kelurahan_id,
-            'rt' => $request->rt,
-            'rw' => $request->rw,
-            'no_hp' => $request->no_hp,
-            'foto' => $request->foto,
-            'user_id' => $id,
-        ]);
-
-        return response()->json($person, 201);
-    }
-
-    public function update(Request $request, $id)
-    {
-        $person = Person::findOrFail($id);
-        $person->update($request->all());
-
-        return response()->json($person);
     }
 }

@@ -37,29 +37,70 @@
 </template>
 
 <script setup>
-defineProps(['isOpen', 'isCollapsed'])
+const props = defineProps(['isOpen', 'isCollapsed'])
 
-const menuGroups = [
-    {
-        title: 'Main',
-        items: [
-            { name: 'Dashboards', icon: 'ph:house-duotone', to: '/admin' },
-            { name: 'User Management', icon: 'ph:users-duotone', to: '/admin/users' }
-        ]
-    },
-    {
-        title: 'Master Data',
-        items: [
-            { name: 'Jurusan', icon: 'ph:graduation-cap-duotone', to: '/admin/jurusan' },
-            { name: 'Sekolah', icon: 'ph:school-duotone', to: '/admin/sekolah' }
-        ]
-    },
-    {
-        title: 'Pages',
-        items: [
-            // { name: 'Pages', icon: 'ph:file-duotone', to: '/admin/pages', badge: 'New' },
-            // { name: 'Task', icon: 'ph:check-square-duotone', to: '/admin/task', badge: 'New' }
-        ]
+const userRole = useCookie('user_role')
+
+const menuGroups = computed(() => {
+    const groups = []
+
+    if (userRole.value === 'admin') {
+        groups.push(
+            {
+                title: 'Main',
+                items: [
+                    { name: 'Dashboards', icon: 'ph:house-duotone', to: '/admin' },
+                    { name: 'User Management', icon: 'ph:users-duotone', to: '/admin/users' }
+                ]
+            },
+            {
+                title: 'Master Data',
+                items: [
+                    { name: 'Jurusan', icon: 'ph:graduation-cap-duotone', to: '/admin/jurusan' },
+                    { name: 'Sekolah', icon: 'ph:building-office', to: '/admin/sekolah' }
+                ]
+            }
+        )
     }
-]
+
+    if (userRole.value === 'pic') {
+        groups.push(
+            {
+                title: 'Sekolah',
+                items: [
+                    { name: 'Dashboard', icon: 'ph:house-duotone', to: '/sekolah' },
+                    { name: 'Manajemen Jurusan', icon: 'ph:graduation-cap-duotone', to: '/sekolah/jurusan' },
+                    { name: 'Data Siswa', icon: 'ph:student-duotone', to: '/sekolah/siswa' },
+                    { name: 'Data Guru', icon: 'ph:chalkboard-teacher-duotone', to: '/sekolah/guru' },
+                ]
+            }
+        )
+    }
+
+    if (userRole.value === 'teacher') {
+        groups.push(
+            {
+                title: 'Guru',
+                items: [
+                    { name: 'Dashboard', icon: 'ph:house-duotone', to: '/guru' },
+                    { name: 'Materi Saya', icon: 'ph:book-open-duotone', to: '/guru/courses' },
+                ]
+            }
+        )
+    }
+
+    if (userRole.value === 'student') {
+        groups.push(
+            {
+                title: 'Siswa',
+                items: [
+                    { name: 'Dashboard', icon: 'ph:house-duotone', to: '/siswa' },
+                    { name: 'Nilai Saya', icon: 'ph:chart-bar-duotone', to: '/siswa/my-grades' },
+                ]
+            }
+        )
+    }
+
+    return groups
+})
 </script>

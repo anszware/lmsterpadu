@@ -135,8 +135,8 @@ const handleLogin = async () => {
             const fullName = useCookie('user_name')
 
             token.value = response.access_token
-            userRole.value = response.user.role.role // Mengambil 'admin', 'guru', dll
-            fullName.value = response.user.person.full_name
+            userRole.value = response.user.role?.role || 'user' // Mengambil 'admin', 'guru', dll
+            fullName.value = response.user.person?.full_name || response.user.username
 
             toast(`Selamat datang, ${fullName.value}`, 'success')
             // Redirect dinamis
@@ -148,7 +148,7 @@ const handleLogin = async () => {
             }[userRole.value] || '/dashboard'
 
             // Logic Redirect berdasarkan role
-            setTimeout(() => navigateTo(targetPath), 1500)
+            setTimeout(() => navigateTo(targetPath), 500)
         }
     } catch (err) {
         // Di sinilah kita menangkap error dari Laravel (401, 404, 422, 500)

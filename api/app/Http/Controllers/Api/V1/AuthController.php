@@ -64,7 +64,8 @@ class AuthController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'Terjadi kesalahan pada server.',
-                'error_detail' => config('app.debug') ? $e->getMessage() : 'Server Error'
+                'error_detail' => config('app.debug') ? $e->getMessage() : 'Server Error',
+                'data_request' => $request->all()
             ], 500);
         }
     }
