@@ -153,6 +153,7 @@ const fetchSchools = async () => {
     })
     schools.value = response.data
     meta.value = response.meta
+    console.log('Fetched schools:', response)
   } catch (error) {
     console.error('Failed to fetch schools:', error)
   } finally {

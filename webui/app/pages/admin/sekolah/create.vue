@@ -54,18 +54,19 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div class="flex flex-col gap-1.5">
                 <label class="text-xs font-bold text-slate-500 uppercase">NPSN</label>
-                <input v-model="form.npsn" type="text" placeholder="Masukkan NPSN" class="form-input-custom" required />
+                <input v-model="form.npsn" type="text" placeholder="Masukkan NPSN" class="form-input-custom" :class="{ 'border-rose-500 ring-1 ring-rose-500': errors.npsn }" required />
                 <p v-if="errors.npsn" class="text-[10px] text-rose-500 mt-1">{{ errors.npsn[0] }}</p>
               </div>
 
               <div class="flex flex-col gap-1.5">
                 <label class="text-xs font-bold text-slate-500 uppercase">Nama Sekolah</label>
-                <input v-model="form.nama_sekolah" type="text" placeholder="Nama Sekolah" class="form-input-custom" required />
+                <input v-model="form.nama_sekolah" type="text" placeholder="Nama Sekolah" class="form-input-custom" :class="{ 'border-rose-500 ring-1 ring-rose-500': errors.nama_sekolah }" required />
+                <p v-if="errors.nama_sekolah" class="text-[10px] text-rose-500 mt-1">{{ errors.nama_sekolah[0] }}</p>
               </div>
 
               <div class="flex flex-col gap-1.5">
                 <label class="text-xs font-bold text-slate-500 uppercase">Jenjang</label>
-                <select v-model="form.jenjang" class="form-input-custom" required>
+                <select v-model="form.jenjang" class="form-input-custom" :class="{ 'border-rose-500 ring-1 ring-rose-500': errors.jenjang }" required>
                   <option value="">Pilih Jenjang</option>
                   <option value="sd">SD</option>
                   <option value="mi">MI</option>
@@ -76,52 +77,83 @@
                   <option value="smk">SMK</option>
                   <option value="mak">MAK</option>
                 </select>
+                <p v-if="errors.jenjang" class="text-[10px] text-rose-500 mt-1">{{ errors.jenjang[0] }}</p>
               </div>
 
               <div class="flex flex-col gap-1.5">
                 <label class="text-xs font-bold text-slate-500 uppercase">Jenis Sekolah</label>
-                <select v-model="form.jenis_sekolah" class="form-input-custom" required>
+                <select v-model="form.jenis_sekolah" class="form-input-custom" :class="{ 'border-rose-500 ring-1 ring-rose-500': errors.jenis_sekolah }" required>
                   <option value="">Pilih Jenis</option>
                   <option value="negeri">Negeri</option>
                   <option value="swasta">Swasta</option>
                 </select>
+                <p v-if="errors.jenis_sekolah" class="text-[10px] text-rose-500 mt-1">{{ errors.jenis_sekolah[0] }}</p>
               </div>
 
               <div class="col-span-full flex flex-col gap-1.5">
                 <label class="text-xs font-bold text-slate-500 uppercase">Alamat Lengkap</label>
-                <textarea v-model="form.alamat_sekolah" rows="2" placeholder="Jl. Contoh No. 123" class="form-input-custom" required></textarea>
+                <textarea v-model="form.alamat_sekolah" rows="2" placeholder="Jl. Contoh No. 123" class="form-input-custom" :class="{ 'border-rose-500 ring-1 ring-rose-500': errors.alamat_sekolah }" required></textarea>
+                <p v-if="errors.alamat_sekolah" class="text-[10px] text-rose-500 mt-1">{{ errors.alamat_sekolah[0] }}</p>
+              </div>
+
+              <div class="flex flex-col gap-1.5">
+                <label class="text-xs font-bold text-slate-500 uppercase">RT</label>
+                <input v-model="form.rt" type="text" placeholder="001" class="form-input-custom" :class="{ 'border-rose-500 ring-1 ring-rose-500': errors.rt }" required />
+                <p v-if="errors.rt" class="text-[10px] text-rose-500 mt-1">{{ errors.rt[0] }}</p>
+              </div>
+
+              <div class="flex flex-col gap-1.5">
+                <label class="text-xs font-bold text-slate-500 uppercase">RW</label>
+                <input v-model="form.rw" type="text" placeholder="001" class="form-input-custom" :class="{ 'border-rose-500 ring-1 ring-rose-500': errors.rw }" required />
+                <p v-if="errors.rw" class="text-[10px] text-rose-500 mt-1">{{ errors.rw[0] }}</p>
+              </div>
+
+              <div class="flex flex-col gap-1.5">
+                <label class="text-xs font-bold text-slate-500 uppercase">Telepon Sekolah</label>
+                <input v-model="form.tlp_sekolah" type="text" placeholder="021xxxxxxxx" class="form-input-custom" :class="{ 'border-rose-500 ring-1 ring-rose-500': errors.tlp_sekolah }" required />
+                <p v-if="errors.tlp_sekolah" class="text-[10px] text-rose-500 mt-1">{{ errors.tlp_sekolah[0] }}</p>
+              </div>
+
+              <div class="flex flex-col gap-1.5">
+                <label class="text-xs font-bold text-slate-500 uppercase">Email Sekolah</label>
+                <input v-model="form.email_sekolah" type="email" placeholder="kontak@sekolah.sch.id" class="form-input-custom" :class="{ 'border-rose-500 ring-1 ring-rose-500': errors.email_sekolah }" required />
+                <p v-if="errors.email_sekolah" class="text-[10px] text-rose-500 mt-1">{{ errors.email_sekolah[0] }}</p>
               </div>
 
               <div class="flex flex-col gap-1.5">
                 <label class="text-xs font-bold text-slate-500 uppercase">Provinsi</label>
-                <select v-model="form.provinsi_id" @change="onProvinsiChange" class="form-input-custom" required>
+                <select v-model="form.provinsi_id" @change="onProvinsiChange" class="form-input-custom" :class="{ 'border-rose-500 ring-1 ring-rose-500': errors.provinsi_id }" required>
                   <option value="">Pilih Provinsi</option>
                   <option v-for="item in provinsis" :key="item.id" :value="item.id">{{ item.nama_provinsi }}</option>
                 </select>
+                <p v-if="errors.provinsi_id" class="text-[10px] text-rose-500 mt-1">{{ errors.provinsi_id[0] }}</p>
               </div>
 
               <div class="flex flex-col gap-1.5">
                 <label class="text-xs font-bold text-slate-500 uppercase">Kota / Kabupaten</label>
-                <select v-model="form.kota_id" :disabled="!form.provinsi_id" @change="onKotaChange" class="form-input-custom" required>
+                <select v-model="form.kota_id" :disabled="!form.provinsi_id" @change="onKotaChange" class="form-input-custom" :class="{ 'border-rose-500 ring-1 ring-rose-500': errors.kota_id }" required>
                   <option value="">Pilih Kota</option>
                   <option v-for="item in kotas" :key="item.id" :value="item.id">{{ item.nama_kota }}</option>
                 </select>
+                <p v-if="errors.kota_id" class="text-[10px] text-rose-500 mt-1">{{ errors.kota_id[0] }}</p>
               </div>
 
               <div class="flex flex-col gap-1.5">
                 <label class="text-xs font-bold text-slate-500 uppercase">Kecamatan</label>
-                <select v-model="form.kecamatan_id" :disabled="!form.kota_id" @change="onKecamatanChange" class="form-input-custom" required>
+                <select v-model="form.kecamatan_id" :disabled="!form.kota_id" @change="onKecamatanChange" class="form-input-custom" :class="{ 'border-rose-500 ring-1 ring-rose-500': errors.kecamatan_id }" required>
                   <option value="">Pilih Kecamatan</option>
                   <option v-for="item in kecamatans" :key="item.id" :value="item.id">{{ item.nama_kecamatan }}</option>
                 </select>
+                <p v-if="errors.kecamatan_id" class="text-[10px] text-rose-500 mt-1">{{ errors.kecamatan_id[0] }}</p>
               </div>
 
               <div class="flex flex-col gap-1.5">
                 <label class="text-xs font-bold text-slate-500 uppercase">Kelurahan / Desa</label>
-                <select v-model="form.kelurahan_id" :disabled="!form.kecamatan_id" class="form-input-custom" required>
+                <select v-model="form.kelurahan_id" :disabled="!form.kecamatan_id" class="form-input-custom" :class="{ 'border-rose-500 ring-1 ring-rose-500': errors.kelurahan_id }" required>
                   <option value="">Pilih Kelurahan</option>
                   <option v-for="item in kelurahans" :key="item.id" :value="item.id">{{ item.nama_kelurahan }}</option>
                 </select>
+                <p v-if="errors.kelurahan_id" class="text-[10px] text-rose-500 mt-1">{{ errors.kelurahan_id[0] }}</p>
               </div>
 
               <div class="flex flex-col gap-1.5">
@@ -144,56 +176,127 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div class="flex flex-col gap-1.5">
                 <label class="text-xs font-bold text-slate-500 uppercase">Username</label>
-                <input v-model="form.pic_username" type="text" placeholder="username" class="form-input-custom" required />
+                <input v-model="form.pic_username" type="text" placeholder="username" class="form-input-custom" :class="{ 'border-rose-500 ring-1 ring-rose-500': errors.pic_username }" required />
+                <p v-if="errors.pic_username" class="text-[10px] text-rose-500 mt-1">{{ errors.pic_username[0] }}</p>
               </div>
 
               <div class="flex flex-col gap-1.5">
                 <label class="text-xs font-bold text-slate-500 uppercase">Email</label>
-                <input v-model="form.pic_email" type="email" placeholder="pic@example.com" class="form-input-custom" required />
+                <input v-model="form.pic_email" type="email" placeholder="pic@example.com" class="form-input-custom" :class="{ 'border-rose-500 ring-1 ring-rose-500': errors.pic_email }" required />
+                <p v-if="errors.pic_email" class="text-[10px] text-rose-500 mt-1">{{ errors.pic_email[0] }}</p>
               </div>
 
               <div class="flex flex-col gap-1.5">
                 <label class="text-xs font-bold text-slate-500 uppercase">Password</label>
-                <input v-model="form.pic_password" type="password" placeholder="********" class="form-input-custom" required />
+                <input v-model="form.pic_password" type="password" placeholder="********" class="form-input-custom" :class="{ 'border-rose-500 ring-1 ring-rose-500': errors.pic_password }" required />
+                <p v-if="errors.pic_password" class="text-[10px] text-rose-500 mt-1">{{ errors.pic_password[0] }}</p>
               </div>
 
               <div class="flex flex-col gap-1.5">
                 <label class="text-xs font-bold text-slate-500 uppercase">NIK (16 Digit)</label>
-                <input v-model="form.pic_nik" type="text" placeholder="32xxxxxxxxxxxxxx" class="form-input-custom" required maxlength="16" />
+                <input v-model="form.pic_nik" type="text" placeholder="32xxxxxxxxxxxxxx" class="form-input-custom" :class="{ 'border-rose-500 ring-1 ring-rose-500': errors.pic_nik }" required maxlength="16" />
+                <p v-if="errors.pic_nik" class="text-[10px] text-rose-500 mt-1">{{ errors.pic_nik[0] }}</p>
               </div>
 
               <div class="flex flex-col gap-1.5">
                 <label class="text-xs font-bold text-slate-500 uppercase">Nama Lengkap</label>
-                <input v-model="form.pic_full_name" type="text" placeholder="Nama Lengkap" class="form-input-custom" required />
+                <input v-model="form.pic_full_name" type="text" placeholder="Nama Lengkap" class="form-input-custom" :class="{ 'border-rose-500 ring-1 ring-rose-500': errors.pic_full_name }" required />
+                <p v-if="errors.pic_full_name" class="text-[10px] text-rose-500 mt-1">{{ errors.pic_full_name[0] }}</p>
               </div>
 
               <div class="flex flex-col gap-1.5">
                 <label class="text-xs font-bold text-slate-500 uppercase">Jenis Kelamin</label>
-                <select v-model="form.pic_gender" class="form-input-custom" required>
+                <select v-model="form.pic_gender" class="form-input-custom" :class="{ 'border-rose-500 ring-1 ring-rose-500': errors.pic_gender }" required>
                   <option value="">Pilih</option>
                   <option value="L">Laki-laki</option>
                   <option value="P">Perempuan</option>
                 </select>
+                <p v-if="errors.pic_gender" class="text-[10px] text-rose-500 mt-1">{{ errors.pic_gender[0] }}</p>
               </div>
 
               <div class="flex flex-col gap-1.5">
                 <label class="text-xs font-bold text-slate-500 uppercase">Nomor HP</label>
-                <input v-model="form.pic_no_hp" type="text" placeholder="08xxxxxxxxxx" class="form-input-custom" required />
+                <input v-model="form.pic_no_hp" type="text" placeholder="08xxxxxxxxxx" class="form-input-custom" :class="{ 'border-rose-500 ring-1 ring-rose-500': errors.pic_no_hp }" required />
+                <p v-if="errors.pic_no_hp" class="text-[10px] text-rose-500 mt-1">{{ errors.pic_no_hp[0] }}</p>
               </div>
 
               <div class="flex flex-col gap-1.5">
                 <label class="text-xs font-bold text-slate-500 uppercase">Tempat Lahir</label>
-                <input v-model="form.pic_tempat_lahir" type="text" placeholder="Kota Lahir" class="form-input-custom" required />
+                <input v-model="form.pic_tempat_lahir" type="text" placeholder="Kota Lahir" class="form-input-custom" :class="{ 'border-rose-500 ring-1 ring-rose-500': errors.pic_tempat_lahir }" required />
+                <p v-if="errors.pic_tempat_lahir" class="text-[10px] text-rose-500 mt-1">{{ errors.pic_tempat_lahir[0] }}</p>
               </div>
 
               <div class="flex flex-col gap-1.5">
                 <label class="text-xs font-bold text-slate-500 uppercase">Tanggal Lahir</label>
-                <input v-model="form.pic_tanggal_lahir" type="date" class="form-input-custom" required />
+                <input v-model="form.pic_tanggal_lahir" type="date" class="form-input-custom" :class="{ 'border-rose-500 ring-1 ring-rose-500': errors.pic_tanggal_lahir }" required />
+                <p v-if="errors.pic_tanggal_lahir" class="text-[10px] text-rose-500 mt-1">{{ errors.pic_tanggal_lahir[0] }}</p>
               </div>
 
-              <div class="col-span-full flex flex-col gap-1.5">
-                <label class="text-xs font-bold text-slate-500 uppercase">Alamat PIC</label>
-                <textarea v-model="form.pic_alamat" rows="2" placeholder="Sama dengan alamat sekolah atau alamat pribadi" class="form-input-custom" required></textarea>
+              <div class="flex flex-col gap-1.5">
+                <label class="text-xs font-bold text-slate-500 uppercase">Foto PIC</label>
+                <div class="flex items-center gap-4">
+                  <img v-if="previewFotoPic" :src="previewFotoPic" class="w-10 h-10 rounded-full object-cover border" />
+                  <div v-else class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center border border-dashed">
+                    <Icon name="ph:user-bold" class="text-slate-400" />
+                  </div>
+                  <input type="file" @change="handleFotoPicUpload" accept="image/*" class="text-[10px] text-slate-500 file:mr-2 file:py-1 file:px-3 file:rounded file:border-0 file:text-[10px] file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
+                </div>
+              </div>
+
+              <div class="col-span-full grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t dark:border-slate-700">
+                <div class="col-span-full flex flex-col gap-1.5">
+                  <label class="text-xs font-bold text-slate-500 uppercase">Alamat PIC (Jalan)</label>
+                  <textarea v-model="form.pic_alamat" rows="2" placeholder="Jl. Contoh No. 123" class="form-input-custom" :class="{ 'border-rose-500 ring-1 ring-rose-500': errors.pic_alamat }" required></textarea>
+                  <p v-if="errors.pic_alamat" class="text-[10px] text-rose-500 mt-1">{{ errors.pic_alamat[0] }}</p>
+                </div>
+
+                <div class="flex flex-col gap-1.5">
+                  <label class="text-xs font-bold text-slate-500 uppercase">RT</label>
+                  <input v-model="form.pic_rt" type="text" placeholder="001" class="form-input-custom" :class="{ 'border-rose-500 ring-1 ring-rose-500': errors.pic_rt }" required />
+                  <p v-if="errors.pic_rt" class="text-[10px] text-rose-500 mt-1">{{ errors.pic_rt[0] }}</p>
+                </div>
+
+                <div class="flex flex-col gap-1.5">
+                  <label class="text-xs font-bold text-slate-500 uppercase">RW</label>
+                  <input v-model="form.pic_rw" type="text" placeholder="001" class="form-input-custom" :class="{ 'border-rose-500 ring-1 ring-rose-500': errors.pic_rw }" required />
+                  <p v-if="errors.pic_rw" class="text-[10px] text-rose-500 mt-1">{{ errors.pic_rw[0] }}</p>
+                </div>
+
+                <div class="flex flex-col gap-1.5">
+                  <label class="text-xs font-bold text-slate-500 uppercase">Provinsi</label>
+                  <select v-model="form.pic_provinsi_id" @change="onPicProvinsiChange" class="form-input-custom" :class="{ 'border-rose-500 ring-1 ring-rose-500': errors.pic_provinsi_id }" required>
+                    <option value="">Pilih Provinsi</option>
+                    <option v-for="item in provinsis" :key="item.id" :value="item.id">{{ item.nama_provinsi }}</option>
+                  </select>
+                  <p v-if="errors.pic_provinsi_id" class="text-[10px] text-rose-500 mt-1">{{ errors.pic_provinsi_id[0] }}</p>
+                </div>
+
+                <div class="flex flex-col gap-1.5">
+                  <label class="text-xs font-bold text-slate-500 uppercase">Kota / Kabupaten</label>
+                  <select v-model="form.pic_kota_id" :disabled="!form.pic_provinsi_id" @change="onPicKotaChange" class="form-input-custom" :class="{ 'border-rose-500 ring-1 ring-rose-500': errors.pic_kota_id }" required>
+                    <option value="">Pilih Kota</option>
+                    <option v-for="item in pic_kotas" :key="item.id" :value="item.id">{{ item.nama_kota }}</option>
+                  </select>
+                  <p v-if="errors.pic_kota_id" class="text-[10px] text-rose-500 mt-1">{{ errors.pic_kota_id[0] }}</p>
+                </div>
+
+                <div class="flex flex-col gap-1.5">
+                  <label class="text-xs font-bold text-slate-500 uppercase">Kecamatan</label>
+                  <select v-model="form.pic_kecamatan_id" :disabled="!form.pic_kota_id" @change="onPicKecamatanChange" class="form-input-custom" :class="{ 'border-rose-500 ring-1 ring-rose-500': errors.pic_kecamatan_id }" required>
+                    <option value="">Pilih Kecamatan</option>
+                    <option v-for="item in pic_kecamatans" :key="item.id" :value="item.id">{{ item.nama_kecamatan }}</option>
+                  </select>
+                  <p v-if="errors.pic_kecamatan_id" class="text-[10px] text-rose-500 mt-1">{{ errors.pic_kecamatan_id[0] }}</p>
+                </div>
+
+                <div class="flex flex-col gap-1.5">
+                  <label class="text-xs font-bold text-slate-500 uppercase">Kelurahan / Desa</label>
+                  <select v-model="form.pic_kelurahan_id" :disabled="!form.pic_kecamatan_id" class="form-input-custom" :class="{ 'border-rose-500 ring-1 ring-rose-500': errors.pic_kelurahan_id }" required>
+                    <option value="">Pilih Kelurahan</option>
+                    <option v-for="item in pic_kelurahans" :key="item.id" :value="item.id">{{ item.nama_kelurahan }}</option>
+                  </select>
+                  <p v-if="errors.pic_kelurahan_id" class="text-[10px] text-rose-500 mt-1">{{ errors.pic_kelurahan_id[0] }}</p>
+                </div>
               </div>
             </div>
           </div>
@@ -223,6 +326,14 @@
                   <div class="flex justify-between border-b dark:border-slate-800 pb-2">
                     <span class="text-xs text-slate-500 font-bold">Jenjang</span>
                     <span class="text-sm font-medium uppercase">{{ form.jenjang }} ({{ form.jenis_sekolah }})</span>
+                  </div>
+                  <div class="flex justify-between border-b dark:border-slate-800 pb-2">
+                    <span class="text-xs text-slate-500 font-bold">Kontak</span>
+                    <span class="text-sm font-medium">{{ form.tlp_sekolah }} / {{ form.email_sekolah }}</span>
+                  </div>
+                  <div class="flex justify-between border-b dark:border-slate-800 pb-2">
+                    <span class="text-xs text-slate-500 font-bold">Alamat</span>
+                    <span class="text-sm font-medium">{{ form.alamat_sekolah }} RT {{ form.rt }} RW {{ form.rw }}</span>
                   </div>
                 </div>
               </div>
@@ -325,13 +436,23 @@ const provinsis = ref([])
 const kotas = ref([])
 const kecamatans = ref([])
 const kelurahans = ref([])
+
+const pic_kotas = ref([])
+const pic_kecamatans = ref([])
+const pic_kelurahans = ref([])
+
 const previewLogo = ref(null)
+const previewFotoPic = ref(null)
 
 const form = reactive({
   // Sekolah
   npsn: '',
   nama_sekolah: '',
   alamat_sekolah: '',
+  rt: '',
+  rw: '',
+  tlp_sekolah: '',
+  email_sekolah: '',
   provinsi_id: '',
   kota_id: '',
   kecamatan_id: '',
@@ -344,6 +465,7 @@ const form = reactive({
   pic_username: '',
   pic_email: '',
   pic_password: '',
+  pic_role_id: 2, // PIC Role
   
   // PIC Person
   pic_nik: '',
@@ -353,6 +475,12 @@ const form = reactive({
   pic_tempat_lahir: '',
   pic_tanggal_lahir: '',
   pic_alamat: '',
+  pic_rt: '',
+  pic_rw: '',
+  pic_provinsi_id: '',
+  pic_kota_id: '',
+  pic_kecamatan_id: '',
+  pic_kelurahan_id: '',
   pic_foto: null
 })
 
@@ -378,6 +506,25 @@ const onKecamatanChange = async () => {
   kelurahans.value = await fetchKelurahan(form.kecamatan_id)
 }
 
+// PIC Address Changes
+const onPicProvinsiChange = async () => {
+  form.pic_kota_id = ''
+  form.pic_kecamatan_id = ''
+  form.pic_kelurahan_id = ''
+  pic_kotas.value = await fetchKota(form.pic_provinsi_id)
+}
+
+const onPicKotaChange = async () => {
+  form.pic_kecamatan_id = ''
+  form.pic_kelurahan_id = ''
+  pic_kecamatans.value = await fetchKecamatan(form.pic_kota_id)
+}
+
+const onPicKecamatanChange = async () => {
+  form.pic_kelurahan_id = ''
+  pic_kelurahans.value = await fetchKelurahan(form.pic_kecamatan_id)
+}
+
 const handleLogoUpload = (e) => {
   const file = e.target.files[0]
   if (file) {
@@ -386,8 +533,76 @@ const handleLogoUpload = (e) => {
   }
 }
 
+const handleFotoPicUpload = (e) => {
+  const file = e.target.files[0]
+  if (file) {
+    form.pic_foto = file
+    previewFotoPic.value = URL.createObjectURL(file)
+  }
+}
+
+const validateStep = (currentStep) => {
+  errors.value = {}
+  let isValid = true
+
+  if (currentStep === 1) {
+    const fields = [
+      { key: 'npsn', label: 'NPSN' },
+      { key: 'nama_sekolah', label: 'Nama Sekolah' },
+      { key: 'jenjang', label: 'Jenjang' },
+      { key: 'jenis_sekolah', label: 'Jenis Sekolah' },
+      { key: 'alamat_sekolah', label: 'Alamat Sekolah' },
+      { key: 'rt', label: 'RT' },
+      { key: 'rw', label: 'RW' },
+      { key: 'tlp_sekolah', label: 'Telepon Sekolah' },
+      { key: 'email_sekolah', label: 'Email Sekolah' },
+      { key: 'provinsi_id', label: 'Provinsi' },
+      { key: 'kota_id', label: 'Kota' },
+      { key: 'kecamatan_id', label: 'Kecamatan' },
+      { key: 'kelurahan_id', label: 'Kelurahan' }
+    ]
+
+    fields.forEach(f => {
+      if (!form[f.key]) {
+        errors.value[f.key] = [`${f.label} wajib diisi`]
+        isValid = false
+      }
+    })
+  } else if (currentStep === 2) {
+    const fields = [
+      { key: 'pic_username', label: 'Username' },
+      { key: 'pic_email', label: 'Email' },
+      { key: 'pic_password', label: 'Password' },
+      { key: 'pic_nik', label: 'NIK' },
+      { key: 'pic_full_name', label: 'Nama Lengkap' },
+      { key: 'pic_gender', label: 'Jenis Kelamin' },
+      { key: 'pic_no_hp', label: 'Nomor HP' },
+      { key: 'pic_tempat_lahir', label: 'Tempat Lahir' },
+      { key: 'pic_tanggal_lahir', label: 'Tanggal Lahir' },
+      { key: 'pic_alamat', label: 'Alamat' },
+      { key: 'pic_rt', label: 'RT' },
+      { key: 'pic_rw', label: 'RW' },
+      { key: 'pic_provinsi_id', label: 'Provinsi PIC' },
+      { key: 'pic_kota_id', label: 'Kota PIC' },
+      { key: 'pic_kecamatan_id', label: 'Kecamatan PIC' },
+      { key: 'pic_kelurahan_id', label: 'Kelurahan PIC' }
+    ]
+
+    fields.forEach(f => {
+      if (!form[f.key]) {
+        errors.value[f.key] = [`${f.label} wajib diisi`]
+        isValid = false
+      }
+    })
+  }
+
+  return isValid
+}
+
 const nextStep = () => {
-  if (step.value < 3) step.value++
+  if (validateStep(step.value)) {
+    if (step.value < 3) step.value++
+  }
 }
 
 const prevStep = () => {

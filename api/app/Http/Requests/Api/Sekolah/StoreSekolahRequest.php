@@ -23,8 +23,7 @@ class StoreSekolahRequest extends FormRequest
             'kota_id'        => ['required', 'exists:kotas,id'],
             'kecamatan_id'   => ['required', 'exists:kecamatans,id'],
             'kelurahan_id'   => ['required', 'exists:kelurahans,id'],
-            'rt'             => ['nullable', 'string', 'max:5'],
-            'rw'             => ['nullable', 'string', 'max:5'],
+
             'tlp_sekolah'    => ['nullable', 'string', 'max:20'],
             'email_sekolah'  => ['nullable', 'email', 'max:255'],
             'jenjang'        => ['required', 'in:sd,mi,smp,mts,sma,ma,smk,mak'],
@@ -35,7 +34,7 @@ class StoreSekolahRequest extends FormRequest
             'pic_username' => ['required', 'string', 'max:255', 'unique:users,username'],
             'pic_email'    => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
             'pic_password' => ['required', 'string', 'min:8'],
-            
+
             // ── Data Person PIC ────────────────────────────────────────
             'pic_nik'           => ['required', 'string', 'digits:16', 'unique:people,nik'],
             'pic_full_name'     => ['required', 'string', 'max:255'],
@@ -45,6 +44,8 @@ class StoreSekolahRequest extends FormRequest
             'pic_tanggal_lahir' => ['required', 'date'],
             'pic_alamat'        => ['required', 'string'],
             'pic_foto'          => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
+            'pic_rt'                => ['nullable', 'string', 'max:5'],
+            'pic_rw'                => ['nullable', 'string', 'max:5'],
         ];
     }
 

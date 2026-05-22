@@ -52,6 +52,8 @@ class AuthController extends Controller
                         'id' => $user->sekolah->id,
                         'nama' => $user->sekolah->nama_sekolah,
                         'alamat' => $user->sekolah->alamat_sekolah,
+                        'tlp_sekolah' => $user->sekolah->tlp_sekolah,
+                        'email_sekolah' => $user->sekolah->email_sekolah
                     ] : null,
                     'person' => $user->person ? [
                         'full_name' => $user->person->full_name,
@@ -84,8 +86,11 @@ class AuthController extends Controller
             ] : null,
             'sekolah' => $user->sekolah ? [
                 'id' => $user->sekolah->id,
+                'npsn' => $user->sekolah->npsn,
                 'nama' => $user->sekolah->nama_sekolah,
-                'alamat' => $user->sekolah->alamat_sekolah,
+                'alamat' => $user->sekolah->alamat_lengkap,
+                'tlp_sekolah' => $user->sekolah->tlp_sekolah,
+                'email_sekolah' => $user->sekolah->email_sekolah
             ] : null,
             'person' => $user->person ?  [
                 "id" => $user->person->id,

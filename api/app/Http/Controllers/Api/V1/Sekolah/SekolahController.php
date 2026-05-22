@@ -21,7 +21,7 @@ class SekolahController extends Controller
     {
         $search = $request->query('search');
 
-        $sekolah = Sekolah::with(['provinsi', 'kota', 'kecamatan', 'kelurahan'])
+        $sekolah = Sekolah::with(['provinsi', 'kota', 'kecamatan', 'kelurahan', 'pic.user.person'])
             ->when($search, function ($query) use ($search) {
                 $query->where('nama_sekolah', 'like', "%{$search}%")
                       ->orWhere('npsn', 'like', "%{$search}%");
@@ -70,8 +70,8 @@ class SekolahController extends Controller
                 'kota_id'       => $request->kota_id,
                 'kecamatan_id'  => $request->kecamatan_id,
                 'kelurahan_id'  => $request->kelurahan_id,
-                'rt'            => $request->rt,
-                'rw'            => $request->rw,
+                'rt'            => $request->pic_rt,
+                'rw'            => $request->pic_rw,
             ];
 
             if ($request->hasFile('pic_foto')) {
@@ -103,11 +103,11 @@ class SekolahController extends Controller
         if ($sekolah->logo_sekolah) {
             Storage::disk('public')->delete($sekolah->logo_sekolah);
         }
-        
-        // Note: CASCADE on database handles pic and children usually, 
+
+        // Note: CASCADE on database handles pic and children usually,
         // but PIC users might need manual cleanup if not desired to keep them.
         $sekolah->delete();
-        
+
         return response()->json(['message' => 'Data sekolah berhasil dihapus.']);
     }
 }
