@@ -58,6 +58,7 @@ class AuthController extends Controller
                     'person' => $user->person ? [
                         'full_name' => $user->person->full_name,
                         'nik' => $user->person->nik,
+                        'foto' => $user->person->foto,
                     ] : null,
                 ]
             ], 200);

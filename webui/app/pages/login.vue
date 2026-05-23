@@ -133,10 +133,12 @@ const handleLogin = async () => {
             const token = useCookie('access_token')
             const userRole = useCookie('user_role') // Tambahkan cookie role
             const fullName = useCookie('user_name')
+            const userFoto = useCookie('user_foto')
 
             token.value = response.access_token
             userRole.value = response.user.role?.role || 'user' // Mengambil 'admin', 'guru', dll
             fullName.value = response.user.person?.full_name || response.user.username
+            userFoto.value = response.user.person?.foto || null
 
             toast(`Selamat datang, ${fullName.value}`, 'success')
             // Redirect dinamis

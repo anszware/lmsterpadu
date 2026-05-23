@@ -73,6 +73,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/jurusan/{jurusan}', [JurusanSekolahController::class, 'destroy']);
         Route::apiResource('siswa', SiswaController::class);
         Route::post('siswa/import', [SiswaController::class, 'importCsv']);
+        Route::apiResource('guru', \App\Http\Controllers\Api\V1\Sekolah\GuruController::class);
     });
 });
 

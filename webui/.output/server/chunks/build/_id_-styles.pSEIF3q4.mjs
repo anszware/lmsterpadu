@@ -1,0 +1,8 @@
+const _id__vue_vue_type_style_index_0_scoped_aa6821cf_lang = ".form-input-custom[data-v-aa6821cf]{border-radius:.5rem;border-width:1px;width:100%;--tw-border-opacity:1;border-color:rgb(226 232 240/var(--tw-border-opacity,1));--tw-bg-opacity:1;background-color:rgb(248 250 252/var(--tw-bg-opacity,1));font-size:.875rem;line-height:1.25rem;padding:.625rem;--tw-text-opacity:1;color:rgb(51 65 85/var(--tw-text-opacity,1));outline:2px solid transparent;outline-offset:2px;transition-duration:.15s;transition-property:all;transition-timing-function:cubic-bezier(.4,0,.2,1)}.form-input-custom[data-v-aa6821cf]:focus{--tw-border-opacity:1;border-color:rgb(59 130 246/var(--tw-border-opacity,1));--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000);--tw-ring-opacity:1;--tw-ring-color:rgb(59 130 246/var(--tw-ring-opacity,1))}.form-input-custom[data-v-aa6821cf]:is(.dark *){--tw-border-opacity:1;background-color:#0f172a80;border-color:rgb(51 65 85/var(--tw-border-opacity,1));--tw-text-opacity:1;color:rgb(226 232 240/var(--tw-text-opacity,1))}";
+
+const _id_Styles_pSEIF3q4 = [
+  _id__vue_vue_type_style_index_0_scoped_aa6821cf_lang
+];
+
+export { _id_Styles_pSEIF3q4 as default };
+//# sourceMappingURL=_id_-styles.pSEIF3q4.mjs.map

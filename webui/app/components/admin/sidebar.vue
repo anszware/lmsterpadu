@@ -1,43 +1,52 @@
 <template>
     <aside
-        class="fixed left-0 top-0 h-full bg-[#111c43] text-slate-300 transition-all duration-300 z-50 overflow-y-auto overflow-x-hidden"
-        :class="[
-            isCollapsed ? 'w-20' : 'w-64',
-            isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
-        ]">
-        <div class="h-16 flex items-center px-6 border-b border-slate-700/50">
-            <div class="flex items-center gap-3">
-                <img src="/logo-icon.png" class="w-8 h-8" alt="Logo">
-                <span v-if="!isCollapsed" class="font-bold text-xl text-white tracking-tight">YNEX</span>
-            </div>
+        class="h-full bg-white dark:bg-[#111c43] text-slate-600 dark:text-[#a3afbb] transition-all duration-300 overflow-y-auto overflow-x-hidden border border-slate-200 dark:border-white/5 shadow-xl w-full"
+    >
+        <div class="h-16 flex items-center justify-center border-b border-slate-100 dark:border-white/5 px-4 mb-2">
+            <NuxtLink to="/admin" class="flex items-center gap-2.5">
+                <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center shadow-lg shadow-primary/20">
+                    <Icon name="ph:graduation-cap-fill" class="text-white text-xl" />
+                </div>
+                <span v-if="!isCollapsed" class="font-bold text-xl text-slate-800 dark:text-white tracking-tight">YNEX <span class="text-primary opacity-80">Edu</span></span>
+            </NuxtLink>
         </div>
 
-        <div class="py-4 px-3 space-y-1">
+        <div class="py-2 px-3 space-y-1">
             <div v-for="group in menuGroups" :key="group.title">
-                <p v-if="!isCollapsed"
-                    class="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-3 mb-2 mt-4">
+                <p v-if="!isCollapsed || isHovered"
+                    class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest px-4 mb-2 mt-4 opacity-70 dark:opacity-40 transition-opacity duration-300">
                     {{ group.title }}
                 </p>
 
-                <NuxtLink v-for="item in group.items" :key="item.name" :to="item.to"
-                    class="flex items-center gap-4 px-3 py-2.5 rounded-lg transition-colors group" :class="[
-                        $route.path === item.to ? 'bg-blue-600 text-white' : 'hover:bg-slate-800 text-slate-400'
-                    ]">
-                    <Icon :name="item.icon" size="20" class="flex-shrink-0" />
-                    <span v-if="!isCollapsed" class="text-sm font-medium whitespace-nowrap">{{ item.name }}</span>
+                <div class="space-y-1">
+                    <NuxtLink v-for="item in group.items" :key="item.name" :to="item.to"
+                        class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all duration-200 group relative overflow-hidden" :class="[
+                            $route.path === item.to 
+                            ? 'bg-primary/5 dark:bg-white/5 text-primary dark:text-white' 
+                            : 'hover:bg-slate-50 dark:hover:bg-white/5 text-slate-500 dark:text-[#a3afbb] hover:text-primary dark:hover:text-white'
+                        ]">
+                        <!-- Active Indicator Bar -->
+                        <div v-if="$route.path === item.to" class="absolute right-0 top-2 bottom-2 w-1 bg-primary rounded-l-full"></div>
+                        
+                        <Icon :name="item.icon" size="20" class="flex-shrink-0 transition-colors" :class="[
+                            $route.path === item.to ? 'text-primary' : 'group-hover:text-primary'
+                        ]" />
+                        <span v-if="!isCollapsed || isHovered" class="text-[13px] font-medium whitespace-nowrap transition-opacity duration-300">{{ item.name }}</span>
 
-                    <span v-if="!isCollapsed && item.badge"
-                        class="ml-auto text-[10px] px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-400 font-bold">
-                        {{ item.badge }}
-                    </span>
-                </NuxtLink>
+                        <span v-if="(!isCollapsed || isHovered) && item.badge"
+                            class="ml-auto text-[10px] px-2 py-0.5 rounded-full bg-primary text-white font-bold shadow-sm transition-opacity duration-300">
+                            {{ item.badge }}
+                        </span>
+                    </NuxtLink>
+                </div>
             </div>
         </div>
     </aside>
 </template>
 
 <script setup>
-const props = defineProps(['isOpen', 'isCollapsed'])
+const props = defineProps(['isOpen', 'isCollapsed', 'isHovered'])
+const emit = defineEmits(['toggle-mobile'])
 
 const userRole = useCookie('user_role')
 
@@ -50,7 +59,8 @@ const menuGroups = computed(() => {
                 title: 'Main',
                 items: [
                     { name: 'Dashboards', icon: 'ph:house-duotone', to: '/admin' },
-                    { name: 'User Management', icon: 'ph:users-duotone', to: '/admin/users' }
+                    { name: 'User Management', icon: 'ph:users-duotone', to: '/admin/users' },
+                    { name: 'Manajemen Guru', icon: 'ph:chalkboard-teacher-duotone', to: '/admin/guru' }
                 ]
             },
             {

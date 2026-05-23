@@ -1,0 +1,1 @@
+import{O as s,L as e}from"./DtqfWe0Y.js";import{u}from"./CNMRxC0Q.js";const f=s((a,i)=>{const l=u("access_token"),o=u("user_role");if(!l.value)return e("/login");const r=a.meta.allowedRoles;if(r&&!r.includes(o.value))return o.value==="admin"?e("/admin"):o.value==="guru"?e("/guru"):o.value==="pic"?e("/sekolah"):o.value==="siswa"?e("/siswa"):e("/login")});export{f as default};

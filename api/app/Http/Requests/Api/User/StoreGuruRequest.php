@@ -13,7 +13,7 @@ class StoreGuruRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()->role->name === 'admin';
+        return in_array($this->user()->role->name, ['admin', 'pic']);
     }
 
     /**

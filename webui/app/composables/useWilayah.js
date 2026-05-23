@@ -9,9 +9,12 @@ export const useWilayah = () => {
                 all: 'true',
                 ...params
             })
-            return response.data || []
+            // Handle both wrapped { data: [...] } and unwrapped [...]
+            const data = response.data || response || []
+            console.log(`[useWilayah] Data loaded from ${url}:`, data.length, 'items')
+            return Array.isArray(data) ? data : (data.data || [])
         } catch (error) {
-            console.error(`Error fetching from ${url}:`, error)
+            console.error(`[useWilayah] Error fetching from ${url}:`, error)
             return []
         } finally {
             loading.value = false
